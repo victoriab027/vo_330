@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+
+<html>
+<head>Simple Calculator</head>
+<body>
+    <form id="calculator-form">
+        <label for="num1">Number 1:</label>
+        <input type="number" id="num1" name="num1">
+        <br>
+        <label for="num2">Number 2:</label>
+        <input type="number" id="num2" name="num2">
+        <br>
+        <label for="op">Operation:</label>
+        <input type="radio" name="op" value="+" checked="">+
+        <input type="radio" name="op" value="-">-
+        <input type="radio" name="op" value="*">+
+        <input type="radio" name="op" value="/">/
+        <br>
+        <input type="submit" value="Calculate">
+      </form>
+    <br>
+    <div id="result">Result = </div>
+
+    <!-- change this to be the embedded PHP stuff -->
+    <script>
+        document.getElementById('calculator-form').addEventListener('submit', function(event) {
+          event.preventDefault();
+      
+          var formData = new FormData(this);
+      
+          var xhr = new XMLHttpRequest();
+          xhr.onreadystatechange = function() {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+              document.getElementById('ans').innerHTML = 'Result = ' + xhr.responseText;
+            }
+          };
+          xhr.open('POST', 'final_calc.php');
+          xhr.send(formData);
+        });
+      </script>
+
+</body>
+</html>
