@@ -1,6 +1,5 @@
 <?php
 #ensure that the database is connected
-require 'database.php';
 # check if the username is sent (via post) 
 if(isset($_POST['username']) ){
     # if so create a variable pointing to the inputted username
@@ -20,6 +19,7 @@ if(isset($_POST['username']) ){
  if($isAUser){//true if username is a valid user
     session_start(); //start session in order to pass the username as a session variable
     $_SESSION["username"] = $username;
+    header("Location: files.php?username=$username");
     exit;   // we call exit here so that the script will stop executing before the connection is broken
 }
     else { // what to do if username is not in valid users list
