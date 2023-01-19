@@ -5,7 +5,8 @@ if(isset($_POST['username']) ){
     # if so create a variable pointing to the inputted username
     $username = $_POST['username'];
     # open users.txt and loop through the file
-    $users = fopen("users.txt", "r");
+    ///srv/uploads/%s/%s
+    $users = fopen("/srv/users.txt", "r");
     $isAUser = false;
     while (($line = fgets($users)) !== false) {
         if ($username == trim($line)) {
