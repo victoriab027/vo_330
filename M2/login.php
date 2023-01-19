@@ -18,11 +18,11 @@ if(isset($_POST['username']) ){
     fclose($users);
 }
  if($isAUser){//true if username is a valid user
-    session_start(); # start session in order to pass the username as a session variable
+    session_start(); //start session in order to pass the username as a session variable
     $_SESSION["username"] = $username;
     exit;   // we call exit here so that the script will stop executing before the connection is broken
 }
-    else { # what to do if username is not in valid users list
+    else { // what to do if username is not in valid users list
         printf("<p><strong>%s</strong> is not a valid username</p>\n",
 		htmlentities($_POST['username']));#tell user that they did not enter valid name and gives button to try to login in again
         $page = 'login.html';
