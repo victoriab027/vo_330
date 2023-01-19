@@ -31,7 +31,7 @@ if( move_uploaded_file($_FILES['uploadedfile']['tmp_name'], $full_path) ){
 	header("Location: upload_success.html");
 	exit;
 }else{
-	header("Location: upload_failure.html");
+	header("Location: upload_failure.php");
 	exit;
 }
 /*
