@@ -1,12 +1,12 @@
 <!DOCTYPE html>
+<link rel="stylesheet" href="style.css">
 <html>
 <head><title>Simple File Sharing Site</title></head>
 <body>
 
 <?php
 session_start();
-$username = $_GET["username"];
-$_SESSION["username"] = $username;
+$username = $_SESSION["username"];
 $files = scandir("/files"); // FILL THIS IN!
 printf("<h1>Welcome <strong>%s</strong>!</h1>\n",
 	    htmlentities($username));
@@ -56,7 +56,7 @@ foreach ($files as $file) {
 	</p>
 </form> 
 
-<h3>Delete a File<h3>
+<h3>Delete a File</h3>
 <form name = "delete" method = "POST" action = "delete.php">
     <select name = "delete">
         <?php 
