@@ -12,19 +12,44 @@ printf("<h1>Welcome <strong>%s</strong>!</h1>\n",
 	    htmlentities($username));
 ?>
 
-<h3>Your Files</h3>
 <?php
 $dir = '/srv/uploads/' . $username;
 
 // Scan the directory and get all the files
 $files = scandir($dir);
+?>
+<h3>Your Files</h3>
+<form>
+  Search: <input type="text" name="search"><br><br>
+</form>
+<?php
+// Get the search value from the input field
+$search = (string) $_GET['search'];
+if( !preg_match('/^[\w_\.\-]+$/', $search) ){
+  print_r('Inavlid Search Query:');
+}
+else if (empty($search)){
+  foreach ($files as $file) {
+    // Ignore . and .. directories
+    if ($file != '.' && $file != '..') {
+      // Check if the file name contains the search value
+        echo $file . '<br>';
+    }
+  }
+} else{
+print_r('Search Query:'.$search);
+print_r("<br>");
 
 // Loop through the files and print them
 foreach ($files as $file) {
   // Ignore . and .. directories
   if ($file != '.' && $file != '..') {
-    echo $file . '<br>';
+    // Check if the file name contains the search value
+    if (stripos($file, $search) !== false) {
+      echo $file . '<br>';
+    }
   }
+}
 }
 ?>
 
