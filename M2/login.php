@@ -1,6 +1,4 @@
 <?php
-#ensure that the database is connected
-require 'database.php';
 # check if the username is sent (via post) 
 if(isset($_POST['username']) ){
     # if so create a variable pointing to the inputted username
