@@ -14,6 +14,9 @@ if( !preg_match('/^[\w_\.\-]+$/', $filename) ){
     exit;
 }
 
+// MAKE SURE IT IS A VALID TYPE OF FILE 
+// get rid of .jpg
+
 // Get the username and make sure it is valid
 $username = $_SESSION['username'];
 if( !preg_match('/^[\w_\-]+$/', $username) ){
@@ -24,6 +27,14 @@ if( !preg_match('/^[\w_\-]+$/', $username) ){
 
 $full_path = sprintf("/srv/uploads/%s/%s", $username, $filename);
 
+if( move_uploaded_file($_FILES['uploadedfile']['tmp_name'], $full_path) ){
+	header("Location: upload_success.html");
+	exit;
+}else{
+	header("Location: upload_failure.html");
+	exit;
+}
+/*
 if( move_uploaded_file($_FILES['uploadedfile']['tmp_name'], $full_path) ){
     header("Location: upload_success.html");
 	exit;
@@ -57,7 +68,7 @@ if( move_uploaded_file($_FILES['uploadedfile']['tmp_name'], $full_path) ){
 	$_SESSION["error"] = $message;
     header("Location: upload_failure.php");
 	exit;
-}
+}*/
 //$_SESSION["error"] = 
 ?>
 
