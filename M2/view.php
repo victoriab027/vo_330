@@ -1,8 +1,3 @@
-<!DOCTYPE html>
-<html>
-<head><title>File Viewing</title></head>
-<body>
-
 <?php
 /*
 Most of this code is taken from the CSE330S Wiki for PHP
@@ -38,17 +33,17 @@ $mime = $finfo->file($file_path);
 printf("mime: %s",$mime);
 
 if (file_exists($file_path)) {
-    if($mime == 'image/png' || $mime == 'image/jpeg' || $mime == 'image/jpg'){ // If it's an image, display like hmtl
+   // if($mime == 'image/png' || $mime == 'image/jpeg' || $mime == 'image/jpg'){ // If it's an image, display like hmtl
         list($width, $height) = getimagesize($file_path);
     echo "<br>";
     printf("filename: %s <br>",$filename);
     printf("path: %s <br>",$file_path);
     printf("path: %s <br>",realpath($file_path));
-    printf('<img src = "/var/www/html/gary.jpg">');
+    printf('<img src = "gary.jpg">');
     printf('<img src = "%s" alt = "Selected Image">',$file_path);
-    }
+   // }
     //HTML: <iframe src="path/to/directory/file.pdf" width="800" height="600"></iframe>
-    else {
+   // else {
         header('Content-Description: File Transfer');
         header('Content-Type: '.$mime);//.mime_content_type($file_path)
         header('Content-Disposition: inline; filename="'.$filename.'"');//basename($file_path)
@@ -57,7 +52,7 @@ if (file_exists($file_path)) {
         header('Pragma: public');
         header('Content-Length: ' . filesize($file_path));
         readfile($file_path);
-    }
+   // }
 } else {
     printf("File not found.");
     //header('Location: files.php');
@@ -76,5 +71,3 @@ readfile($file_path);
 */
 }
 ?>
-</body>
-</html>
