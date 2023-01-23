@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<!--
+    The user is directed here if they wish to upload a new profile picture. It posts the form to do so
+    and executes the data in upload.php
+-->
+<html>
+    <form action="upload.php" method="post" enctype="multipart/form-data">
+        <label>Select Image File:</label>
+        <input type="file" name="image">
+        <input type="submit" name="submit" value="Upload">
+    </form>
+</html>

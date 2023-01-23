@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<!--
+  This is the intro/login page for our website. It posts a form for the login information which will be executed 
+  at the news_login.php file. It also gives an option to sign in as a guest or create a new user
+-->
+<html>
+<head><title>Bears News Login</title>
+  </head>
+<body>
+<h2>Welcome to Bears News!</h2>
+<h3>Login</h3>
+<form action="news_login.php" method="post">
+    <label for="username">Username:</label><br>
+    <input type="text" id="username" name="username"><br>
+    <label for="password">Password:</label><br>
+    <input type="password" id="password" name="password"><br><br>
+    <input type="submit" value="Submit">
+  </form> 
+ 
+
+</form>
+<p>Or <a href="guest.php">continue as guest</a></p> 
+<p>Or <a href="new_user.php">create an account</a></p> 
+
+
+
+</body>
+</html>
+
