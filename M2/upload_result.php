@@ -5,7 +5,7 @@
 
 <?php
 if(isset($_POST['menu'])){
-    $val = $_POST['menu'];
+    $val = (string) $_POST['menu'];
     if($val == "return"){
         session_start();
         $username = $_SESSION["username"];

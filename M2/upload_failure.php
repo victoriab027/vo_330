@@ -5,7 +5,7 @@
 <h2>Upload Failed!</h2>
 <?php
  session_start();
-$printer = $_SESSION["error"];
+$printer = (string) $_SESSION["error"];
 printf("The error was: <strong>%s</strong><br><br>",$printer)
 ?>
 <p>What would you like to do now?</p>

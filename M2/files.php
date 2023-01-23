@@ -6,7 +6,7 @@
 
 <?php
 session_start();
-$username = $_SESSION["username"];
+$username = (string) $_SESSION["username"];
 $files = scandir("/files"); // FILL THIS IN!
 printf("<h1>Welcome <strong>%s</strong>!</h1>\n",
 	    htmlentities($username));

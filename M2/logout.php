@@ -4,7 +4,7 @@
 <body>
 <?php
 session_start();
-$username = $_SESSION["username"];
+$username = (string) $_SESSION["username"];
 printf("<h1>Goodbye %s!</h1>\n",
 	    htmlentities($username));
 //sleep(3000);//delay before returning to the home page

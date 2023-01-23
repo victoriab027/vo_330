@@ -6,9 +6,9 @@
 <?php
 
 if(isset($_POST['delete'])){
-    $filename = $_POST['delete'];
+    $filename = (string) $_POST['delete'];
     session_start();
-    $username = $_SESSION["username"];
+    $username =  (string) $_SESSION["username"];
     $filepath = '/srv/uploads/'.$username ;
     $file = $filepath . '/'  . $filename;
     printf($file);

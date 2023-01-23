@@ -3,7 +3,7 @@
 # check if the username is sent (via post) 
 if(isset($_POST['username']) ){
     # if so create a variable pointing to the inputted username
-    $username = $_POST['username'];
+    $username = (string) $_POST['username'];
     # open users.txt and loop through the file
     ///srv/uploads/%s/%s
     $users = fopen("/srv/users.txt", "r");
