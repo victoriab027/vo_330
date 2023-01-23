@@ -33,6 +33,7 @@ if($cnt == 1 && password_verify($pwd_guess, $pwd_hash)){
     session_start();
     $_SESSION["username"] = $username;
     $_SESSION["reg"] = true; // is a registered user
+    $_SESSION['token'] = bin2hex(random_bytes(32));
     $mysqli->close();
     header("Location: news_index.php"); //direct to index/home page
     exit;
