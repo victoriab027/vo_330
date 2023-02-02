@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<!--
+  This is the intro/login page for our website. It posts a form for the nickname the user would liek to user
+-->
+<html>
+<head><title>Chat Login</title>
+  </head>
+<body>
+<h2>Welcome to Chatty Chat!</h2>
+<form id="nicknameForm">
+    <label for="nickname">Enter your nickname:</label>
+    <input type="text" name="nickname" id="nickname" required>
+    <button type="submit">Submit</button>
+  </form>
+  
+  <script>
+    // Get the form element
+    const form = document.getElementById('nicknameForm');
+  
+    // Get the nickname input field
+    const nicknameInput = form.querySelector('#nickname');
+  
+    // Add a submit event listener to the form
+    form.addEventListener('submit', function(event) {
+      // Prevent the default form submission behavior
+      event.preventDefault();
+  
+      // Get the nickname from the input field
+      const nickname = nicknameInput.value;
+  
+      // Store the nickname in the local storage
+      localStorage.setItem('nickname', nickname);
+  
+      // Redirect the user to the second page
+      window.location.href = `/chat.html?nickname=${nickname}`;
+    });
+  </script>
+  
+  
+</body>
+</html>
+

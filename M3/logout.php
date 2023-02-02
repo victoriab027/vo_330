@@ -5,7 +5,7 @@
 -->
 <?php
 session_destroy();
-header("Location: news_login.html");
+header("Location: login.php");
 exit;
 
 ?>

@@ -1,10 +1,14 @@
-<!--
-  This page executes the form from new_login.html. It checks to see if they have a valid login, making
-  sure to use password_verify() for checking the password and not == or === for security
--->
 
 <?php
 require 'database.php';
+
+session_start();
+//test for validity of the CSRF token on the server side
+if(!hash_equals($_SESSION['token'], $_POST['token'])){
+    printf("%s, %s", $_SESSION['token'], $_POST['token']);
+      die("Request forgery detected");
+  }
+
 
 //gather data from SQL
 $stmt = $mysqli->prepare("SELECT COUNT(*), username, password FROM users WHERE username = ?");
@@ -30,12 +34,10 @@ $validPass = false;
 if($cnt == 1 && password_verify($pwd_guess, $pwd_hash)){
     // Login succeeded!
     $stmt->close();
-    session_start();
     $_SESSION["username"] = $username;
     $_SESSION["reg"] = true; // is a registered user
-    $_SESSION['token'] = bin2hex(random_bytes(32));
     $mysqli->close();
-    header("Location: news_index.php"); //direct to index/home page
+    header("Location: index.php"); //direct to index/home page
     exit;
 } 
 else {

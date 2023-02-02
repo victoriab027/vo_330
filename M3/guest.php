@@ -7,7 +7,7 @@
 session_start();
 $_SESSION["username"] = "guest";
 $_SESSION["reg"] = false;
-header("Location: news_index.php?guest=true");
+header("Location: index.php?guest=true");
 exit;
 
 ?>

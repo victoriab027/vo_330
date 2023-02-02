@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+
+<html>
+   
+   <head>
+      <style>
+         #hidden-element {
+           display: none;
+         }
+       </style>
+      <link rel="stylesheet" href="style.css">
+      <script src="/socket.io/socket.io.js"></script>
+      <script type ="text/javascript">
+      
+      const socketio = io.connect();
+
+      //MESSAGING
+      socketio.on("message_to_client",function(data) {
+         //Append an HR thematic break and the escaped HTML of the new message
+         document.getElementById("chatlog").appendChild(document.createElement("hr"));
+         document.getElementById("chatlog").appendChild(document.createTextNode(data['message']));
+      });
+      socketio.on("message_to_indiv",function(data) {
+         //Append an HR thematic break and the escaped HTML of the new message
+         document.getElementById("priv_chatlog").appendChild(document.createElement("hr"));
+         document.getElementById("priv_chatlog").appendChild(document.createTextNode(data['message']));
+      });
+      socketio.on('roomList', rooms => {
+            // Loop through the rooms and add an option element for each room to the select element
+            const select = document.getElementById('room-select');
+            for (const room of rooms) {
+               select.innerHTML += `<option value="${room.name}">${room.name}</option>`;
+            }
+         });
+
+      function roomRunner(){
+         socketio.emit("getRooms");
+         // Wait for the 'roomList' event from the server
+
+      }
+      function sendMessage(){
+         let msg = document.getElementById("message_input").value;
+         // Send a "sendMessage" event to the server, with the message
+         socketio.emit("sendMessage", msg);
+      }
+      function sendPrivateMessage(){
+         
+         let to = document.getElementById("private_message_receiver").value;
+         let msg = document.getElementById("private_message_input").value;
+         // Send a "privateMessage" event to the server, with the message
+         socketio.emit("privateMessage", to, msg);
+
+      }
+      function naming(){
+         const nickname = document.getElementById('nickname').value;
+         socketio.emit("set_nickname", nickname);
+         let output_name = "Welcome "+ nickname;
+         document.getElementById("name_print").innerHTML = output_name;//update the online list
+         document.getElementById('hidden-element').style.display = 'block';
+      }
+      function showElement() {
+         // show the element by setting its style to an empty string
+         document.getElementById('hidden-element').style = '';
+      }
+      //change user to that room
+      function changeRoom(){
+         const selectedRoom = document.getElementById('room-select').value;
+         socketio.emit("joinRoom", selectedRoom);
+         updateOnline();
+      }
+      function newRoom(){
+         const newRoom = document.getElementById('room-name').value;
+         updateOnline();
+        socketio.emit("createRoom", newRoom);
+        // socketio.emit("getRooms");\updateOnline();\
+        updateOnline();
+         
+      }
+      function updateOnline(){
+         // Wait for the 'onlineList' event from the server
+         socketio.on('onlineList', members => {
+            // Loop through the members and output them in a bulleted list
+            let output = "";
+            for (let user of members) {
+               if(user !== ""){
+                  output += `<li>${user}</li>`;
+               }
+            }
+            document.getElementById("online-users").innerHTML = output;//update the online list
+         });
+      }
+      
+      // Wait for the 'onlineList' event from the server
+      socketio.on('onlineList', members => {
+         // Loop through the members and output them in a bulleted list
+         let output = "";
+         for (let user of members) {
+            output += `<li>${user}</li>`;
+         }
+         document.getElementById("online-users").innerHTML = output;//update the online list
+      });
+    </script>
+   </head>
+<body>
+   <!--NICKNAME WORK -->
+      <label>Nickname:</label>
+      <input type="text" id="nickname" />
+      <button onclick = naming()>Submit</button>
+   <div id="name_print"></div>
+
+<div id="output"></div>
+
+<div id="hidden-element">
+<div style="display: flex;">
+   <!-- SECTION 1: SHOW THE CHATS => this will later change to be something more specifc -->
+<div style="flex: 1;">
+   <h1 class="center">Messaging</h1>
+   <input type=text" id="message_input"/>
+   <button onclick="sendMessage()">send</button>
+   <div id="chatlog"></div>
+</div>
+
+<!-- SECTION 2: DISPLAY THE ROOMS 
+   here, we will show the active rooms as well as give the option to join one
+-->
+<div style="flex: 1;">
+   <h1 class="center">Chat Rooms</h1>
+      <label for="room-name">Enter a name for your new chatroom:</label>
+      <input type="text" id="room-name" name="room-name">
+      <button onclick= "newRoom()">Create</button>
+      <script>
+      //onclick = "newRoom()" 
+         const new_room_button = document.getElementById('submit_button2');
+   
+         new_room_button.addEventListener('click', () => {
+            //document.getElementById("output").innerHTML = "here";
+            const selectedRoom = room-name.value;
+            document.getElementById("test").innerHTML = selectedRoom;
+            //console.log(`Selected room: ${selectedRoom}`);
+         });
+         </script>
+      <br><br>
+      <strong>Online Users</strong><br>
+      
+      <div id="online-users"></div>
+   
+   <script>
+   //JOINING CHAT ROOMS SECTION
+   updateOnline();
+   roomRunner();
+   
+   </script>
+   <h3>Select a room:</h3>
+      
+   <label for="room-select">Select a room:</label>
+   <select id="room-select">
+   <!-- Options will be added here by JavaScript code -->
+   </select>
+   <button onclick="changeRoom()" id = "submit-button">Submit</button>
+      <script>
+      
+      const button = document.getElementById('submit-button');
+         //THIS DOESNT HAPPEN
+      button.addEventListener('click', () => {
+         //document.getElementById("output").innerHTML = "here";
+         const selectedRoom = select.value;
+         document.getElementById("output").innerHTML = selectedRoom;
+         //console.log(`Selected room: ${selectedRoom}`);
+      });
+      </script>
+      
+</div>
+<!-- SECTION 3: PRIVATE MESSAGES
+   here, we will show the private messages to this person & to others
+-->
+<script>
+   //ADD SOMETHING HERE THAT WILL FILL IN A DROP DOWN WITH WHO WE ARE SENDING A MESSAGE TO
+</script>
+<div style="flex: 1;">
+   <h1 class="center">Private Messages</h1>
+   <select id="private_message_receiver">
+      <!-- Options will be added here by JavaScript code -->
+      </select>
+   <input type=text" id="private_message_input"/>
+   <button onclick="sendPrivateMessage()">send</button>
+   <div id="priv_chatlog"></div>
+</div>
+</div>
+</div>
+</body>
+</html>

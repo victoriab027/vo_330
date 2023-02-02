@@ -28,11 +28,6 @@ $username = $_SESSION["username"];
 $reg = $_SESSION["reg"];
 $try = $_SESSION["guest"];
 
-//test for validity of the CSRF token on the server side
-if(!hash_equals($_SESSION['token'], $_POST['token'])){
-	die("Request forgery detected");
-}
-
 printf("<p>Welcome %s<p>",$username);
 
 // list all the sotries from the database, regardless of creator

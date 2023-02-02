@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<link rel="stylesheet" href="style.css">
+    <script src="/socket.io/socket.io.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script type ="text/javascript">
+	
+	var room = "home";
+	var user = null;
+    var socketio = io.connect();
+    
+	$(document).ready(function(){
+		$("#logged_out").hide();
+		$("#logged_in").hide();
+		$("#logout_button").hide();
+		$("#login_button").show();
+	});
+	
+	socketio.on("message_to_client",function(data) {
+		//Append an HR thematic break and the escaped HTML of the new message
+		document.getElementById("chatlog").appendChild(document.createElement("hr"));
+		document.getElementById("chatlog").appendChild(document.createTextNode(data['user'] + ": "+data['message']));
+	});
+	
+	//Display new room
+	socketio.on("display_newRoom", function(data){
+	
+		var list_rooms = data.rooms;	
+		var list_messages  = document.getElementById("room-list");
+		while(list_messages.firstChild){
+			list_messages.removeChild(list_messages.firstChild);			 
+		}
+
+		for(var j = 0; j< list_rooms.length; j++){
+			var new_radio = document.createElement("input");
+			var room_name = list_rooms[i];
+			new_radio.setAttribute("id", room_name);
+			new_radio.setAttribute("type", "radio");
+			new_radio.setAttribute("name", "room");
+			new_radio.setAttribute("class","room");
+			new_radio.setAttribute("onchange", "change_room()");
+			document.getElementById("room-list").appendChild(document.createElement("br"));
+			document.getElementById("room-list").appendChild(new_radio);
+			document.getElementById("room-list").appendChild(document.createTextNode(room_name)); 
+		} 
+	});
+	
+	//Private Room login
+	socketio.on("enter_pwd",function(data){
+		socketio.emit("pri_room_login",{password:prompt("Enter password")});
+	});
+	//Private Room login failed
+	socketio.on("password_failed", function(data){
+		if(data.success){	
+			alert("Incorrect password");
+			document.getElementById("home").checked = true;
+			socketio.emit("changeroom", {user:user, prev_room:room, next_room:'home'});	
+		}
+	});
+	// Display users
+	socketio.on("display_newUsers", function(data){
+		
+		if(room == data.room){
+		
+			var list_users = document.getElementById("user-list");
+			//Code to empty list refered from http://stackoverflow.com/questions/683366/remove-all-the-children-dom-elements-in-div
+			while(list_users.hasChildNodes()){
+				list_users.removeChild(list_users.lastChild);
+			}
+			
+			for(var i = 0; i < data.users.length; i++){
+				document.getElementById("user-list").appendChild(document.createElement("div"));
+				document.getElementById("user-list").appendChild(document.document.createTextNode(data.users[i].username));
+			}
+		}
+	});
+	//Attempt to join a banned room
+	socketio.on ("banned", function (data) {
+		document.getElementById("home").checked = true;
+		alert("You are not allowed to join this chat room.");
+	});
+	
+	//Ban alert
+	socketio.on("ban_alert", function(data){
+		if(data.success){
+			alert('You are banned from ' + data.room + ' forever.');
+		}
+		document.getElementById("home").checked = true;
+	});
+	//Kick alert
+	socketio.on("kick_alert", function(data){
+			if(data.success){
+				alert('You are kicked from ' + data.room + ' temporarily.');
+			}
+			document.getElementById("home").checked = true;
+		});
+	
+	function login(){
+		var user = document.getElementById("username").value;
+	
+		if (user == null || user.trim() == ""){
+			alert("Invalid Username");
+		}
+		else{
+			socketio.emit("in", {user:user});
+			
+			//Handle welcome message 
+			$("#logged_out").hide();
+			$("#logged_in").show();
+			
+			//Handle login/ logout buttons
+			$("#logout_button").show();
+			$("#login_button").hide();
+		}
+	}
+	
+	function logout(){
+		//Handle welcome message 
+		$("#logged_out").show();
+		$("#logged_in").hide();
+			
+		//Handle login/ logout buttons
+		$("#logout_button").hide();
+		$("#login_button").show();
+		
+		socketio.emit("out", {user: user,room:room});
+		
+		//Code to empty list refered from http://stackoverflow.com/questions/683366/remove-all-the-children-dom-elements-in-div
+		while(chatlog.hasChildNodes()){
+				chatlog.removeChild(chatlog.lastChild);
+		}
+	}
+	
+	// Create a new room on user request
+	function createRoom(){
+		if(user == null){	
+			return;
+		}
+		var room_name = document.getElementById('new_room').value;
+		room_name = room_name.trim();
+		if(room_name.trim() == ""){
+			alert("Room name is blank.");
+			return;
+		}
+		if(document.getElementById(room_name).trim() != ""){
+			alert("Room name is currently in use.");
+			return;
+		}
+		
+		var pwd = prompt("Enter password for private room");
+		document.getElementById("new_room").value = '';
+		if(pwd == ""){
+			socketio.emit("new_public", {master: user, room_name: room_name});
+		}
+		else {
+			socketio.emit("new_private", {master: user, pwd: pwd, room_name: room_name});
+		}			
+	}
+	
+	
+	// Jump from one room to another
+	function changeRoom() {
+		var rooms = document.getElementsById("home");
+		for (var i = 0; i< rooms.length; i++){
+			if(rooms[i].checked){
+				next_room = rooms[i].getAttribute('id');	
+				break;
+			}
+		}
+		if(next_room != room){
+			socketio.emit("changeRoom", {user:user, prev_room:room, next_room:next_room});
+		}
+		else{
+			alert('Select a different room');
+		}	
+    }
+
+    function sendMessage(){
+		if(user == null){	
+			return;
+		}
+        var msg = document.getElementById("message_input").value;
+		if(msg == null){	
+			return;
+		}
+		msg = msg.trim();
+        if(msg.indexOf("BAN") == 0){
+			socketio.emit("ban", {master: user, slave: msg.substring(4), room: room});
+		}
+		else if (msg.indexOf("KICK") == 0){
+			socketio.emit("kick", {master: user, slave: msg.substring(5), room: room});
+		}
+		else if (msg.indexOf("PM") == 0){
+			pm = prompt("Enter private message for " + msg.substring(3));
+			socketio.emit("private_msg", {master: user, slave: msg.substring(3), msg: pm});
+		}
+		else{
+			socketio.emit("message_to_server", {message:msg.trim(), user:user, room:room});
+		}
+		document.getElementById("message_input").value = "";
+    }
+	
+	  
+    </script>
+    </head>
+    <body>	
+	<div id="main">
+		<div id="loginBox">
+			<input type="text" id="username" placeholder="Enter unique username"/>
+			<button id="login_button" onclick="login()">Login</button>
+			<button id="logout_button" onclick="logout()">Logout</button>
+		</div>
+		<div id="logged_in">Welcome to weird chatroom</div>
+		<div id="logged_out">Thank you for visiting us</div>
+		<table cellspacing="30" width = 80%>
+		<tr>
+		<td>
+			<h2>List of chatrooms</h2>
+		</td>
+		<td>
+			<h2>List of Users in current room</h2>
+		</td>
+		<td rowspan ="2">
+			<h2 id="current-room-name">Home </h2>
+			<div id="chatlog">
+			<h2> Private Messages </h2>
+			<div id="pms"></div>
+			
+			<textarea rows="2" id="message_input"> </textarea>
+			<button id="send_message" onclick="sendMessage()">send</button>      	
+			</div>
+		</td>
+		</tr>
+		<tr>
+		<td>
+			<!-- Code from https://github.com/sterlingrollins/ starts here-->
+			<form id="room-list">
+				<input type="radio" onclick="changeRoom()" name="room" checked value="home" class="room" id="home" >Home<br>
+			</form>
+			<!-- Code from https://github.com/sterlingrollins/ ends here-->
+			<div id="add_room">
+				<h3> Create a new room </h3>
+				<div id = "input_room"><input type="text" id="new_room"/></div>
+				<button id="create_room" onclick="createRoom()">add </button>	
+			</div>
+		</td>
+		<td>
+			<div id="user-list"></div>
+		</td>
+		</tr>
+		</table>
+   </body>
+</html>

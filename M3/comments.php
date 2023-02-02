@@ -3,95 +3,10 @@
 This page displays all the comments across all stories of the news site. It sorts them with the most recent comment
 displayed on the top.
 -->
-<style>
-    header {
-      background-color: rgb(119, 101, 101);
-      color: white;
-      padding: 10px;
-      font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
-      margin-bottom: 20px;
-    }
-    nav {
-      display: flex;
-      background-color: rgb(156, 148, 148);
-      padding: 0px;
-      justify-content: space-between;
-    }
-    nav ul {
-      list-style: none;
-      margin: 0;
-      padding: 0;
-      display: flex;
-    }
-    nav li {
-      margin: 0 0px;
-      border: solid;
-      padding: 15px;
-    }
-    nav a {
-      color: white;
-      text-decoration: none;
-    }
-	.box {
-    width: 550px;
-    height: 30px;
-	padding: 5px;
-	margin: 10px;
-    background-color: #ccc;
-    border: 1px solid #333;
-	font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
-  }
-  .title {
-      width: 100%;
-      height: 20px;
-      margin-top: 15px;
-      background-color: rgb(82, 64, 64);
-      color: white;
-      padding: 10px;
-      font-size: 17px;
-      font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
-    }
-    .com_box {
-    width: 80%;
-    height: 50px;
-	margin: 10px;
-    padding: 10px;
-    background-color: #ccc;
-    border: 1px solid #333;
-    font-size: 15px;
-	font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
-  }
-  .like_num_box{
-    width: 5%;
-    height: 10px;
-    padding: 10px;
-    background-color: rgb(224, 193, 193);
-    border: 1px solid #333;
-    margin-left:10px;
-    margin-top:-9px;
-    font-size: 13px;
-	font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
-  }
-  .com_box {
-    width: 80%;
-    height: 50px;
-	margin: 10px;
-    padding: 10px;
-    background-color: #ccc;
-    border: 1px solid #333;
-    font-size: 15px;
-	font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
-  }
-  .story {
-    width: 550px;
-    height: 30px;
-	padding: 5px;
-	margin: 10px;
-    background-color: #ccc;
-    border: 1px solid #333;
-	font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
-  }
-  </style>
+<head>
+<title>Comments</title>
+<link rel="stylesheet" href="style.css">
+</head>
 <html>
     <title>User Profile</title>
     <header>
